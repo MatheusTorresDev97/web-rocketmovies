@@ -1,8 +1,15 @@
 import React from 'react'
+import { ThemeProvider } from "styled-components";
+import theme from "./styles/theme";
+import GlobalStyle from "./styles/global";
+import Routes from './routes';
 
 const App = () => {
   return (
-    <div>App</div>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <Routes />
+    </ThemeProvider>
   )
 }
 
