@@ -1,11 +1,12 @@
 import React from 'react'
 import { BrowserRouter } from "react-router-dom";
-import AuthRoutes from './AuthRotes';
+import AuthRoutes from './AuthRoutes';
+import AppRoutes from './AppRoutes';
 
 const Routes = () => {
   return (
     <BrowserRouter>
-       <AuthRoutes />
+       <AppRoutes />
     </BrowserRouter>
   )
 }
