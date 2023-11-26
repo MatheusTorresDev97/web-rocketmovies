@@ -4,10 +4,10 @@ import AppRoutes from './AppRoutes';
 import { useAuth } from "../hooks/auth";
 
 const Routes = () => {
-  const { userInfos } = useAuth();
+  const { user  } = useAuth();
   return (
     <BrowserRouter>
-      {userInfos ? <AppRoutes /> : <AuthRoutes />}
+      {user ? <AppRoutes /> : <AuthRoutes />}
     </BrowserRouter>
   )
 }

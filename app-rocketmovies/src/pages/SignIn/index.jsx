@@ -1,18 +1,24 @@
 import React, { useState } from 'react'
 import { FiMail, FiLock } from "react-icons/fi";
 import { Container, Content, Form, BackgroundImg } from "./styles";
-import  Input  from "../../components/Input";
-import  Button  from "../../components/Button";
-import  ButtonText  from "../../components/ButtonText";
+import Input from "../../components/Input";
+import Button from "../../components/Button";
+import ButtonText from "../../components/ButtonText";
 import { useAuth } from "../../hooks/auth";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { signIn } = useAuth()
+  const { signIn } = useAuth();
 
   function handleSignIn() {
+    const someoneFieldWasNotFilled = !email || !password;
+
+    if (someoneFieldWasNotFilled) {
+      return alert("Preencha todos os campos para entrar!");
+    }
+
     signIn({email, password})
   }
 
@@ -29,15 +35,15 @@ const SignIn = () => {
             value={email}
             onChange={e => setEmail(e.target.value)}
           />
-           <Input
+          <Input
             icon={FiLock}
             placeholder="Senha"
             type="password"
             value={password}
             onChange={e => setPassword(e.target.value)}
           />
-           <Button title="Entrar" onClick={handleSignIn} />
-           
+          <Button title="Entrar" onClick={handleSignIn} />
+
           <ButtonText to="/register" title="Criar conta" />
         </Form>
       </Content>
