@@ -4,10 +4,17 @@ import { Container, Content, Form, BackgroundImg } from "./styles";
 import  Input  from "../../components/Input";
 import  Button  from "../../components/Button";
 import  ButtonText  from "../../components/ButtonText";
+import { useAuth } from "../../hooks/auth";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const { signIn } = useAuth()
+
+  function handleSignIn() {
+    signIn({email, password})
+  }
 
   return (
     <Container>
@@ -29,7 +36,8 @@ const SignIn = () => {
             value={password}
             onChange={e => setPassword(e.target.value)}
           />
-          <Button title="Entrar" />
+           <Button title="Entrar" onClick={handleSignIn} />
+           
           <ButtonText to="/register" title="Criar conta" />
         </Form>
       </Content>
