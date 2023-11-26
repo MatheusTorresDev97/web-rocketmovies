@@ -1,6 +1,6 @@
 import { Container } from "./styles";
 
-export function Input({ icon: Icon, type = "text", className, ...rest }) {
+const Input = ({ icon: Icon, type = "text", className, ...rest }) => {
   return (
     <Container className={className}>
       {Icon && <Icon />}
@@ -8,3 +8,5 @@ export function Input({ icon: Icon, type = "text", className, ...rest }) {
     </Container>
   );
 }
+
+export default Input
