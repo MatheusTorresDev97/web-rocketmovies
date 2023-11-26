@@ -30,7 +30,7 @@ const SignIn = () => {
             onChange={e => setPassword(e.target.value)}
           />
           <Button title="Entrar" />
-          <ButtonText title="Criar Conta" />
+          <ButtonText to="/register" title="Criar conta" />
         </Form>
       </Content>
       <BackgroundImg />
