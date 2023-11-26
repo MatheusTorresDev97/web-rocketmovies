@@ -68,15 +68,18 @@ function AuthProvider({ children }) {
   }
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("@rocketmovies:user"));
     const token = localStorage.getItem("@rocketmovies:token");
+    const user = localStorage.getItem("@rocketmovies:user");  
 
-    if (user && token) {
-      setData(user);
-      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    if (token && user) {
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+      setData({
+        token,
+        user: JSON.parse(user)
+      });
     }
   }, []);
-
   return (
     <AuthContext.Provider value={{ user: data.user, signIn, signOut, updateUser }}>
       {children}

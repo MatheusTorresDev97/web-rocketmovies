@@ -1,17 +1,95 @@
 import React, { useState } from 'react'
 import { FiArrowLeft } from "react-icons/fi";
 import { Container, Inputs, TextArea, Buttons } from "./styles";
+import { useNavigate } from "react-router-dom";
 
 import Header from '../../components/Header'
+import NoteItem from '../../components/NoteItem'
 import Button from '../../components/Button'
 import ButtonText from '../../components/ButtonText'
 import Input from '../../components/Input'
 import { Wrapper } from '../../components/Wrapper';
+import { api } from "../../services/api";
 
 const New = () => {
     const [title, setTitle] = useState("");
     const [rating, setRating] = useState("");
     const [description, setDescription] = useState("");
+    const [tags, setTags] = useState([]);
+    const [newTag, setNewTag] = useState("");
+
+    const navigate = useNavigate();
+
+    function inputValidator() {
+        if (!title) {
+            alert("É necessário dar um título para cadastrar um filme.");
+            return false;
+        }
+
+        const isRatingValid = rating >= 0 && rating <= 5 && rating !== "";
+
+        if (!isRatingValid) {
+            alert("É necessário dar uma nota entre 0 e 5 para cadastrar um filme.");
+            return false;
+        }
+
+        if (newTag) {
+            alert(
+                "Um marcador foi preenchido, mas não foi adicionado. Adicione-o, ou deixe o campo vazio."
+            );
+            return false;
+        }
+
+        return true;
+    }
+
+    function handleBack() {
+        const userConfirmation = confirm(
+            "Todas as mudanças serão perdidas...Tem certeza que deseja descartar as alterações?"
+        );
+
+        if (userConfirmation) {
+            navigate("/");
+        }
+    }
+
+    function handleAddNewTag() {
+        const tagAlreadyAdded = tags.includes(newTag);
+
+        if (tagAlreadyAdded) {
+            return alert("Este marcador já foi adicionado!");
+        }
+
+        if (newTag !== "") {
+            setTags(prevState => [...prevState, newTag]);
+            setNewTag("");
+        }
+    }
+
+    function handleDeleteTag(deleted) {
+        const tagsFiltered = tags.filter(tag => tag !== deleted);
+
+        setTags(tagsFiltered);
+    }
+
+    async function handleSave() {
+        const passedValidation = inputValidator();
+
+        if (passedValidation) {
+            try {
+                api.post("/notes", { title, description, rating, tags });
+                alert("Filme cadastrado com sucesso!");
+                navigate(-1);
+            } catch (error) {
+                if (error.response) {
+                    alert(error.response.data.message);
+                } else {
+                    alert("Não foi possível cadastrar o filme");
+                    console.log(error);
+                }
+            }
+        }
+    }
 
     return (
         <Container>
@@ -40,16 +118,29 @@ const New = () => {
                         onChange={e => setDescription(e.target.value)}
                     />
                     <h2>Marcadores</h2>
-                    <section className='note-items'>
-
+                    <section className="note-items">
+                        {tags.map((tag, index) => (
+                            <NoteItem
+                                key={`${tag}-${index}`}
+                                onClick={() => handleDeleteTag(tag)}
+                                value={tag}
+                            />
+                        ))}
+                        <NoteItem
+                            isNew
+                            placeholder="Nova tag"
+                            onClick={handleAddNewTag}
+                            value={newTag}
+                            onChange={e => setNewTag(e.target.value)}
+                        />
                     </section>
                     <Buttons>
                         <Button
                             title="Descartar alterações"
                             highlighted={false}
-
+                            onClick={handleBack}
                         />
-                        <Button title="Salvar alterações" />
+                        <Button title="Salvar alterações" onClick={handleSave} />
                     </Buttons>
                 </Wrapper>
             </main>
